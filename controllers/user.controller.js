@@ -1,5 +1,15 @@
 const User = require("../models/User.model");
 
+const { body, validationResult } = require("express-validator");
+
+/****** VALIDATION ********/
+const bodyValidations = [
+  body("login").isLength({ min: 3, max: 30 }).trim().escape(),
+  body("phone").isLength({ min: 5, max: 50 }).trim().escape(),
+  body("avatar").isLength({ min: 5, max: 50 }).trim().escape(),
+  body("password").isLength({ min: 5, max: 50 }).trim().escape(),
+];
+
 /****** GET USER ********/
 exports.get = async (req, res) => {
   try {
@@ -26,9 +36,22 @@ exports.getAll = async (req, res) => {
 exports.add = async (req, res) => {
   try {
     console.log("user.add");
-    res.send("user.add");
+
+    // validate user data
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { login, password, avatar, phone } = req.body;
+
+    const newUser = new User({ login, password, avatar, phone });
+
+    await newUser.save();
+
+    res.status(200).send(newUser);
   } catch (err) {
-    console.log(err);
+    console.log(err.message);
     res.status(500).send("problem with adding user");
   }
 };

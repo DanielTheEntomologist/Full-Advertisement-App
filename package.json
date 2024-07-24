@@ -6,9 +6,11 @@
   "scripts": {
     "start": "npm-run-all -l -p start:*",
     "start:server": "nodemon server.js",
+    "devstart": "nodemon server.js & mongod --dbpath ./db",
     "build": "cd client && npm install && npm run build"
   },
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-formidable": "^1.2.0",

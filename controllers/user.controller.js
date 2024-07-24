@@ -1,14 +1,7 @@
 const User = require("../models/User.model");
+const bcrypt = require("bcrypt");
 
-const { body, validationResult } = require("express-validator");
-
-/****** VALIDATION ********/
-const bodyValidations = [
-  body("login").isLength({ min: 3, max: 30 }).trim().escape(),
-  body("phone").isLength({ min: 5, max: 50 }).trim().escape(),
-  body("avatar").isLength({ min: 5, max: 50 }).trim().escape(),
-  body("password").isLength({ min: 5, max: 50 }).trim().escape(),
-];
+const { validationResult } = require("express-validator");
 
 /****** GET USER ********/
 exports.get = async (req, res) => {
@@ -17,7 +10,7 @@ exports.get = async (req, res) => {
     res.send("user.getUser");
   } catch (err) {
     console.log(err);
-    res.status(500).send("problem with getting user");
+    res.status(500).json({ message: "problem with getting user" });
   }
 };
 
@@ -40,19 +33,40 @@ exports.add = async (req, res) => {
     // validate user data
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      console.log(errors);
+      res.status(400).json({ errors: errors.array() });
+      return;
     }
 
     const { login, password, avatar, phone } = req.body;
 
-    const newUser = new User({ login, password, avatar, phone });
+    const existingUser = await User.findOne({ login: login });
+    if (existingUser) {
+      res.status(409).json({ message: "User already exists" });
+      return;
+    }
+
+    // hash password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const newUser = new User({
+      login,
+      password: hashedPassword,
+      avatar,
+      phone,
+      salt,
+    });
 
     await newUser.save();
 
+    // return new user while hiding password and salt
+    newUser.password = undefined;
+    newUser.salt = undefined;
     res.status(200).send(newUser);
   } catch (err) {
     console.log(err.message);
-    res.status(500).send("problem with adding user");
+    res.status(500).json({ message: "problem with adding user" });
   }
 };
 
@@ -63,7 +77,7 @@ exports.login = async (req, res) => {
     res.send("user.login");
   } catch (err) {
     console.log(err);
-    res.status(500).send("problem with loging in user");
+    res.status(500).json({ message: "problem with loging in user" });
   }
 };
 
@@ -74,6 +88,6 @@ exports.remove = async (req, res) => {
     res.send("user.remove");
   } catch (err) {
     console.log(err);
-    res.status(500).send("problem with removing user");
+    res.status(500).json({ message: "problem with removing user" });
   }
 };

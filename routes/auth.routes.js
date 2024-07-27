@@ -9,6 +9,6 @@ router.post("/auth/register", userValidator.add, user.add);
 router.post("/auth/login", userValidator.login, user.login);
 router.use(authMiddleware.isAuthorised);
 router.get("/auth/user", user.current);
-router.get("/auth/logout", user.logout);
+router.delete("/auth/logout", user.logout);
 
 module.exports = router;

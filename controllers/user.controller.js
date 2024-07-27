@@ -127,6 +127,8 @@ exports.current = async (req, res) => {
 /****** LOGOUT USER ********/
 exports.logout = async (req, res) => {
   try {
+    if (process.env.NODE_ENV !== "production") await Session.deleteMany({});
+
     req.session.destroy();
     res.json({ message: "Logged out" });
   } catch (err) {

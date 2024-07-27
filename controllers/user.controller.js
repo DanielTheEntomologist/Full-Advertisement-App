@@ -74,10 +74,31 @@ exports.add = async (req, res) => {
 exports.login = async (req, res) => {
   try {
     console.log("user.login");
-    res.send("user.login");
+    const { login, password } = req.body;
+
+    const user = await User.findOne({ login: login });
+
+    if (!user) {
+      console.log("user not found");
+      res.status(404).json({ message: "Incorrect Credentials" });
+      return;
+    }
+
+    // const hashedPassword = await bcrypt.hash(password, user.salt);
+    // const isValidPassword =  hashedPassword === user.password;
+    const isValidPassword = await bcrypt.compare(password, user.password);
+
+    if (!isValidPassword) {
+      console.log("incorrect password");
+      res.status(404).json({ message: "Incorrect Credentials" });
+      return;
+    }
+
+    req.session.user = user;
+    res.json({ message: "Login Succesful" });
   } catch (err) {
     console.log(err);
-    res.status(500).json({ message: "problem with loging in user" });
+    res.status(500).json({ message: "problem with logging in user" });
   }
 };
 
@@ -89,5 +110,27 @@ exports.remove = async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "problem with removing user" });
+  }
+};
+
+/****** CURRENT USER ********/
+exports.current = async (req, res) => {
+  try {
+    console.log("user.current", req.session.user);
+    res.json({ message: "Current user is: " + req.session.user.login });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "problem with getting current user" });
+  }
+};
+
+/****** LOGOUT USER ********/
+exports.logout = async (req, res) => {
+  try {
+    req.session.destroy();
+    res.json({ message: "Logged out" });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "problem with logging out user" });
   }
 };

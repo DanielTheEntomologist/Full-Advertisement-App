@@ -2,7 +2,9 @@ const express = require("express");
 const cors = require("cors");
 const path = require("path");
 const mongoose = require("mongoose");
-const { conditionalFormidable } = require("./customMiddleware");
+const { conditionalFormidable } = require("./utils/conditionalFormidable");
+const session = require("express-session");
+const MongoStore = require("connect-mongo");
 const connectToDB = require("./db");
 
 // start express server
@@ -16,7 +18,14 @@ connectToDB();
 
 // add middleware
 app.use(cors());
-
+app.use(
+  session({
+    secret: process.env.EXPRESS_SESSION_SECRET,
+    store: MongoStore.create(mongoose.connection),
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 

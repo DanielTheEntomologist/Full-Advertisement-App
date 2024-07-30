@@ -1,4 +1,5 @@
 const User = require("../models/User.model");
+const Session = require("../models/Session.model");
 const bcrypt = require("bcrypt");
 
 const { validationResult } = require("express-validator");
@@ -38,7 +39,10 @@ exports.add = async (req, res) => {
       return;
     }
 
-    const { login, password, avatar, phone } = req.body;
+    const { login, password, phone } = req.body;
+    const avatar = req.file ? req.file.path : "";
+
+    console.log("avatar", avatar);
 
     const existingUser = await User.findOne({ login: login });
     if (existingUser) {

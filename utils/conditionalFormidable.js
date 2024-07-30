@@ -2,7 +2,7 @@ const formidable = require("express-formidable");
 const uniqid = require("uniqid");
 
 // Middleware for handling multipart/form-data
-exports.conditionalFormidable = (req, res, next) => {
+exports.uploadFile = (req, res, next) => {
   if (req.headers["content-type"]?.startsWith("multipart/form-data")) {
     formidable({ uploadDir: "./public/uploads/" }, [
       {

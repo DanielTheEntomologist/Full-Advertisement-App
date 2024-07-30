@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const path = require("path");
 const mongoose = require("mongoose");
-const { conditionalFormidable } = require("./utils/conditionalFormidable");
+// const { conditionalFormidable } = require("./utils/conditionalFormidable");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const connectToDB = require("./db");
@@ -28,11 +28,11 @@ app.use(
 );
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-
-app.use(conditionalFormidable);
+// app.use(conditionalFormidable);
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, "/public")));
+
 // app.use(express.static(path.join(__dirname, "/client/build")));
 
 // add photo routes

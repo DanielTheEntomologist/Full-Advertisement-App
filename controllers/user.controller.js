@@ -4,6 +4,17 @@ const bcrypt = require("bcrypt");
 
 const { validationResult } = require("express-validator");
 
+const { unlink } = require("node:fs/promises");
+
+const deleteFile = async function (path) {
+  try {
+    await unlink(path);
+    // console.log(`successfully deleted ${path}`);
+  } catch (error) {
+    console.error("there was an error:", error.message);
+  }
+};
+
 /****** GET USER ********/
 exports.get = async (req, res) => {
   try {
@@ -42,10 +53,12 @@ exports.add = async (req, res) => {
     const { login, password, phone } = req.body;
     const avatar = req.file ? req.file.path : "";
 
-    console.log("avatar", avatar);
+    // console.log("avatar", avatar);
 
     const existingUser = await User.findOne({ login: login });
     if (existingUser) {
+      // if user exists, delete uploaded avatar
+      if (avatar) await deleteFile(avatar);
       res.status(409).json({ message: "User already exists" });
       return;
     }

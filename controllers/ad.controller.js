@@ -60,9 +60,19 @@ exports.get = async (req, res) => {
 
 exports.delete = async (req, res) => {
   try {
-    const adId = res.params.id;
+    const adId = req.params.id;
     console.log("ad.delete on adId", adId);
-    res.status(200).json({ message: "ad.delete not implemented yet" });
+
+    const ad = await Ad.findById(adId);
+
+    if (!ad) {
+      res.status(404).json({ message: "ad not found" });
+      return;
+    }
+
+    await ad.deleteOne();
+
+    res.status(200).json({ message: "ad deleted" });
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "problem with deleting ad" });

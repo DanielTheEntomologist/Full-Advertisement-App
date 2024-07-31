@@ -38,6 +38,7 @@ app.use(express.static(path.join(__dirname, "/public")));
 // add photo routes
 app.use("/api", require("./routes/auth.routes"));
 app.use("/api", require("./routes/user.routes"));
+app.use("/api", require("./routes/ad.routes"));
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname + "/index.html"));

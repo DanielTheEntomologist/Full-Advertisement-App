@@ -4,9 +4,7 @@ const bcrypt = require("bcrypt");
 
 const { validationResult } = require("express-validator");
 
-const { unlink } = require("node:fs/promises");
-
-const deleteFile = require("../utils/deleteFile");
+const { deleteFile } = require("../utils/deleteFile");
 
 /****** GET USER ********/
 exports.get = async (req, res) => {

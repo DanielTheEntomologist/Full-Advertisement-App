@@ -18,8 +18,8 @@ const deleteFile = async function (path) {
 /****** GET USER ********/
 exports.get = async (req, res) => {
   try {
-    console.log("user.getUser");
-    res.send("user.getUser");
+    const users = await User.find();
+    res.status(200).json(users);
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "problem with getting user" });
@@ -29,8 +29,8 @@ exports.get = async (req, res) => {
 /****** GET ALL USERS ********/
 exports.getAll = async (req, res) => {
   try {
-    console.log("user.getAll");
-    res.send("user.getAll");
+    const users = await User.find();
+    res.status(200).json(users);
   } catch (err) {
     console.log(err);
     res.status(500).send("problem with getting all users");
@@ -40,8 +40,6 @@ exports.getAll = async (req, res) => {
 /****** CREATE USER ********/
 exports.add = async (req, res) => {
   try {
-    console.log("user.add");
-
     // validate user data
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -122,8 +120,18 @@ exports.login = async (req, res) => {
 /****** REMOVE USER ********/
 exports.remove = async (req, res) => {
   try {
-    console.log("user.remove");
-    res.send("user.remove");
+    // mongodb remove user
+    const user = await User.deleteOne({ _id: req.session.user._id });
+    console.log("user.remove", user);
+    // remove session record
+    if (process.env.NODE_ENV !== "production") await Session.deleteMany({});
+    req.session.destroy();
+
+    await deleteFile(req.session.user.avatar);
+
+    res.status(200).send({
+      message: "User " + req.session.user.login + " removed and logged out",
+    });
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "problem with removing user" });
@@ -142,7 +150,7 @@ exports.current = async (req, res) => {
 };
 
 /****** LOGOUT USER ********/
-exports.logout = async (req, res) => {
+const logout = async (req, res) => {
   try {
     if (process.env.NODE_ENV !== "production") await Session.deleteMany({});
 
@@ -153,3 +161,5 @@ exports.logout = async (req, res) => {
     res.status(500).json({ message: "problem with logging out user" });
   }
 };
+
+exports.logout = logout;

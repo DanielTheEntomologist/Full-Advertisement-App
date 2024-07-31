@@ -13,8 +13,9 @@ router.post(
   user.add
 );
 router.post("/auth/login", userValidator.login, user.login);
-router.use(authMiddleware.isAuthorised);
-router.get("/auth/user", user.current);
-router.delete("/auth/logout", user.logout);
+
+router.get("/auth/user", authMiddleware.isAuthorised, user.current);
+router.delete("/auth/logout", authMiddleware.isAuthorised, user.logout);
+router.delete("/auth/remove", authMiddleware.isAuthorised, user.remove);
 
 module.exports = router;

@@ -1,5 +1,4 @@
-const Photo = require("../models/photo.model");
-// const Voter = require("../models/voter.model");
+const Ad = require("../models/Ad.model");
 
 function escapeHTML(str) {
   return str.replace(/[&<>"']/g, function (match) {
@@ -20,7 +19,7 @@ function escapeHTML(str) {
   });
 }
 
-/****** SUBMIT PHOTO ********/
+/****** SUBMIT AD ********/
 
 exports.add = async (req, res) => {
   try {
@@ -76,51 +75,89 @@ exports.add = async (req, res) => {
   }
 };
 
-/****** LOAD ALL PHOTOS ********/
+/****** LOAD ALL ADS ********/
 
 exports.loadAll = async (req, res) => {
   try {
-    res.json(await Photo.find());
+    res.status(200).json(await Ad.find());
   } catch (err) {
     res.status(500).json(err);
   }
 };
 
-/****** VOTE FOR PHOTO ********/
-
-exports.vote = async (req, res) => {
-  const clientId = req.clientId;
-  const photoId = req.params.id;
-
-  console.log(clientId, "likes", photoId);
+// GET /ads – który zwróci wszystkie ogłoszenia,
+exports.getAll = async (req, res) => {
   try {
-    const voteResult = await votesController.addVote(clientId, photoId);
-    if (voteResult === "already voted") {
-      res.status(400).json("already voted");
-    }
-    if (voteResult === "vote added") {
-      const photoToUpdate = await Photo.findOne({ _id: photoId });
-      photoToUpdate.votes++;
-      await photoToUpdate.save();
-      res.send({ message: "OK" });
-    }
-    if (!voteResult || voteResult === "error") {
-      res.status(500).json("error voting on photo");
-    }
+    const ads = await Ad.find();
+    res.status(200).json(ads);
   } catch (err) {
-    res.status(500).json("error voting on photo");
+    console.log(err);
+    res.status(500).send("problem with getting all ads");
   }
+};
+// GET /ads/:id – który zwróci konkretne ogłoszenie,
+exports.get = async (req, res) => {
+  try {
+    const ad = await Ad.findById(req.params.id);
+    res.status(200).json(ad);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("problem with getting ad");
+  }
+};
 
-  // updatePhotoVotes();
-  // try {
-  //   const photoToUpdate = await Photo.findOne({ _id: req.params.id });
-  //   if (!photoToUpdate) res.status(404).json({ message: "Not found" });
-  //   else {
-  //     photoToUpdate.votes++;
-  //     photoToUpdate.save();
-  //     res.send({ message: "OK" });
-  //   }
-  // } catch (err) {
-  //   res.status(500).json(err);
-  // }
+// POST /api/ads – do dodawania nowego ogłoszenia,
+exports.add = async (req, res) => {
+  try {
+    console.log("ad.add");
+    res.status(200).json({ message: "ad.add not implemented yet" });
+    // const { title, description, author, price, phone, email } = req.body;
+    // const newAd = new Ad({
+    //   title,
+    //   description,
+    //   author,
+    //   price,
+    //   phone,
+    //   email,
+    // });
+    // await newAd.save();
+    // res.status(200).json(newAd);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "problem with adding ad" });
+  }
+};
+
+// DELETE /api/ads/:id – do usuwania ogłoszenia,
+exports.delete = async (req, res) => {
+  try {
+    const adId = res.params.id;
+    console.log("ad.delete on adId", adId);
+    res.status(200).json({ message: "ad.delete not implemented yet" });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "problem with deleting ad" });
+  }
+};
+
+// PUT lub PATCH /api/ads/:id – do edycji ogłoszenia,
+exports.update = async (req, res) => {
+  try {
+    const adId = res.params.id;
+    console.log("ad.update on adId", adId);
+    res.status(200).json({ message: "ad.update not implemented yet" });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "problem with updating ad" });
+  }
+};
+
+exports.search = async (req, res) => {
+  try {
+    console.log("ad.search");
+    res.status(200).json({ message: "ad.search not implemented yet" });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "problem with searching ad" });
+  }
 };

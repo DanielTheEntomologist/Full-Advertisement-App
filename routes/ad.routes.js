@@ -20,6 +20,6 @@ router.post(
 router.delete("/ads/:id", authMiddleware.isAuthorised, adController.delete);
 router.patch("/ads/:id", authMiddleware.isAuthorised, adController.update);
 
-router.put("/ads/search/:searchPhrase", adController.search);
+router.get("/ads/search/:searchPhrase", adController.search);
 
 module.exports = router;

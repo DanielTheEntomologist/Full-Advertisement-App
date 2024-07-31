@@ -104,7 +104,7 @@ exports.update = async (req, res) => {
     const image = req.file ? req.file.path : undefined;
 
     if (
-      body.title &&
+      req.body.title &&
       (await Ad.findOne({ title: body.title, seller: ad.seller }))
     ) {
       res.status(409).json({
@@ -115,7 +115,7 @@ exports.update = async (req, res) => {
       return;
     }
 
-    ad = Object.assign(ad, req.body);
+    Object.assign(ad, req.body);
     if (image) {
       ad.image = image;
     }
@@ -132,7 +132,26 @@ exports.update = async (req, res) => {
 exports.search = async (req, res) => {
   try {
     console.log("ad.search");
-    res.status(200).json({ message: "ad.search not implemented yet" });
+    console.log(req.params.searchPhrase);
+
+    const searchPhrase = req.params.searchPhrase;
+    // const regex = `\b(${searchPhrase})\b`; // whole word
+    const regex = `(${searchPhrase})`;
+
+    // title, content, date, price, location, seller;
+
+    const ads = await Ad.find({
+      $or: [
+        { title: { $regex: regex } },
+        { content: { $regex: regex } },
+        { location: { $regex: regex } },
+      ],
+    });
+
+    // const regexPattern = `\\b(${searchPhrase("|")})\\b`; // Create the regex pattern
+    // const regex = new RegExp(regexPattern, "gi"); // Create the regex object
+
+    res.status(200).json(ads);
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "problem with searching ad" });

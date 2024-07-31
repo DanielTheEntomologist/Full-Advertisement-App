@@ -8,6 +8,11 @@ exports.add = async (req, res) => {
     const { title, content, date, price, location, seller } = req.body;
     image = req.file ? req.file.path : "";
 
+    if (seller !== req.session.user._id) {
+      res.status(401).json({ message: "You are not authorized" });
+      return;
+    }
+
     if (await Ad.findOne({ title: title, seller: seller })) {
       res.status(409).json({
         message:

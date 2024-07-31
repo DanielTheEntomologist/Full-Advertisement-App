@@ -12,7 +12,24 @@ const displayErrors = (req, res, next) => {
   next();
 };
 
-/****** VALIDATION ********/
+/****** VALIDATIONS ********/
+const onlyExpectedFields = [
+  body()
+    .custom((body) => {
+      const keys = [
+        "title",
+        "content",
+        "date",
+        "image",
+        "price",
+        "location",
+        "seller",
+      ];
+      return Object.keys(body).every((key) => keys.includes(key));
+    })
+    .withMessage("Some extra parameters are sent"),
+];
+
 const validations = [
   body("title").isLength({ min: 3, max: 50 }).trim().escape(),
   body("content").isLength({ min: 20, max: 1000 }).trim().escape(),

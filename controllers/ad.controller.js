@@ -61,12 +61,15 @@ exports.get = async (req, res) => {
 exports.delete = async (req, res) => {
   try {
     const adId = req.params.id;
-    console.log("ad.delete on adId", adId);
 
     const ad = await Ad.findById(adId);
 
     if (!ad) {
       res.status(404).json({ message: "ad not found" });
+      return;
+    }
+    if (ad.seller !== req.user._id) {
+      res.status(401).json({ message: "unauthorized" });
       return;
     }
 
@@ -81,9 +84,40 @@ exports.delete = async (req, res) => {
 
 exports.update = async (req, res) => {
   try {
-    const adId = res.params.id;
-    console.log("ad.update on adId", adId);
-    res.status(200).json({ message: "ad.update not implemented yet" });
+    const adId = req.params.id;
+    const ad = await Ad.findById(adId);
+
+    if (!ad) {
+      res.status(404).json({ message: "ad not found" });
+      return;
+    }
+    if (ad.seller !== req.session.user._id) {
+      res.status(401).json({ message: "You are not authorized" });
+      return;
+    }
+
+    const image = req.file ? req.file.path : undefined;
+
+    if (
+      body.title &&
+      (await Ad.findOne({ title: body.title, seller: ad.seller }))
+    ) {
+      res.status(409).json({
+        message:
+          "Ad with title " + title + " by user " + seller + " already exists",
+      });
+      await deleteFile(image);
+      return;
+    }
+
+    ad = Object.assign(ad, req.body);
+    if (image) {
+      ad.image = image;
+    }
+
+    ad.save();
+
+    res.status(200).json({ message: "ad updated" });
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "problem with updating ad" });

@@ -18,7 +18,7 @@ router.post(
 );
 
 router.delete("/ads/:id", authMiddleware.isAuthorised, adController.delete);
-router.put("/ads/:id", authMiddleware.isAuthorised, adController.update);
+router.patch("/ads/:id", authMiddleware.isAuthorised, adController.update);
 
 router.put("/ads/search/:searchPhrase", adController.search);
 

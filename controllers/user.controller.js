@@ -69,7 +69,7 @@ exports.add = async (req, res) => {
     // return new user while hiding password and salt
     newUser.password = undefined;
     newUser.salt = undefined;
-    res.status(200).send(newUser);
+    res.status(201).send(newUser);
   } catch (err) {
     console.log(err.message);
     res.status(500).json({ message: "problem with adding user" });
@@ -86,7 +86,7 @@ exports.login = async (req, res) => {
 
     if (!user) {
       console.log("user not found");
-      res.status(404).json({ message: "Incorrect Credentials" });
+      res.status(401).json({ message: "Incorrect Credentials" });
       return;
     }
 
@@ -96,7 +96,7 @@ exports.login = async (req, res) => {
 
     if (!isValidPassword) {
       console.log("incorrect password");
-      res.status(404).json({ message: "Incorrect Credentials" });
+      res.status(401).json({ message: "Incorrect Credentials" });
       return;
     }
 

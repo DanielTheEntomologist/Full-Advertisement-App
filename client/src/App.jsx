@@ -2,17 +2,14 @@ import { useState } from "react";
 import "./components/layout/MainLayout/MainLayout";
 import MainLayout from "./components/layout/MainLayout/MainLayout.jsx";
 
-import ads from "./components/common/AdCard/MockAds";
-import AdCard from "./components/common/AdCard/AdCard";
+import ExplorePage from "./components/pages/Explore/ExplorePage.jsx";
 
 function App() {
   const [count, setCount] = useState(0);
 
   return (
     <MainLayout>
-      {ads.map((ad) => (
-        <AdCard ad={ad} key={ad.id} />
-      ))}
+      <ExplorePage />
     </MainLayout>
   );
 }

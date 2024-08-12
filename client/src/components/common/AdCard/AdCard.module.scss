@@ -6,12 +6,20 @@
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
   transition: transform 0.3s ease-in-out;
 }
-.card:hover {
-  transform: translateY(-5px);
+
+.cardBody {
+  height: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
-.ad-image {
+
+.card:hover {
+  transform: scale(1.05);
+  z-index: 200;
+}
+
+.adImage {
   height: 200px;
   object-fit: cover;
-  border-top-left-radius: 1rem;
-  border-top-right-radius: 1rem;
 }

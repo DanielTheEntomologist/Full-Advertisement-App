@@ -1,4 +1,7 @@
-import { useState } from 'react';
+import { useState } from "react";
+import logo from "/src/assets/logoPlaceholder.png";
+import Logo from "/src/components/common/Logo/Logo";
+
 import {
   Button,
   Collapse,
@@ -7,21 +10,23 @@ import {
   NavbarBrand,
   Nav,
   NavItem,
-  NavLink
-} from 'reactstrap';
+  NavLink,
+} from "reactstrap";
 
 const MainMenu = () => {
-
   const [isOpen, setIsOpen] = useState(false);
-  
+
   const toggle = () => {
     setIsOpen(!isOpen);
-  }
+  };
 
   return (
     <div>
       <Navbar color="dark" dark expand="md">
-        <NavbarBrand href="/">New Wave Festival</NavbarBrand>
+        <NavbarBrand href="/">
+          <Logo src={logo} />
+          AdMarket
+        </NavbarBrand>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className="ms-auto align-items-center" navbar>
@@ -29,11 +34,20 @@ const MainMenu = () => {
               <NavLink href="/">Home</NavLink>
             </NavItem>
             <NavItem>
-              <NavLink href="/prices">Prices</NavLink>
+              <NavLink href="/ads">Explore</NavLink>
             </NavItem>
             <NavItem>
-              <NavLink href="/order-a-ticket">
-                <Button outline color="primary">Order a ticket!</Button>
+              <NavLink href="/login">
+                <Button outline color="primary">
+                  Login
+                </Button>
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink href="/login">
+                <Button outline color="primary">
+                  Register
+                </Button>
               </NavLink>
             </NavItem>
           </Nav>
@@ -41,7 +55,6 @@ const MainMenu = () => {
       </Navbar>
     </div>
   );
-
-}
+};
 
 export default MainMenu;

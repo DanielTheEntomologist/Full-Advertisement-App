@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
-import './Logo.scss';
+import styles from "./Logo.module.scss";
 
-const Logo = ({ links, location }) => (
-  <h1 className="logo">Blog.app</h1>
-);
+const Logo = ({ src }) => <img src={src} className={styles.logo} />;
 
 export default Logo;

@@ -1,24 +1,59 @@
 import React from "react";
 
 import { Row, Col } from "reactstrap";
+import { useState, useEffect } from "react";
 
 // import styles from "./ExplorePage.module.scss";
 
-import ads from "../../common/AdCard/MockAds";
+import mockAds from "../../common/AdCard/MockAds";
 import AdCard from "../../common/AdCard/AdCard";
+import AdCardPlaceholder from "../../common/AdCardPlaceholder/AdCardPlaceholder";
 import SearchCategories from "../../common/SearchCategories/SearchCategories";
 
-const ExplorePage = ({}) => (
-  <section id="explore-page" className="container">
-    <SearchCategories />
+const ExplorePage = ({}) => {
+  const [ads, setAds] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      console.log("Loading ads...");
+
+      setLoading(false);
+      setAds(mockAds);
+
+      return () => clearTimeout(timeout);
+    }, 2000);
+  }, []);
+
+  const dummyAds = Array.from({ length: 10 }, (_, i) => i + 1); // Creates an array [1, 2, 3, ..., 10]
+  let content = (
     <Row>
-      {ads.map((ad) => (
-        <Col xs={12} sm={6} md={4} lg={3} key={ad.id} className="my-2">
-          <AdCard ad={ad} />
+      {dummyAds.map((id) => (
+        <Col xs={12} sm={6} md={4} lg={3} key={"loading" + id} className="my-2">
+          <AdCardPlaceholder />
         </Col>
       ))}
     </Row>
-  </section>
-);
+  );
+
+  if (!loading) {
+    content = (
+      <Row>
+        {ads.map((ad) => (
+          <Col xs={12} sm={6} md={4} lg={3} key={ad.id} className="my-2">
+            <AdCard ad={ad} />
+          </Col>
+        ))}
+      </Row>
+    );
+  }
+
+  return (
+    <section id="explore-page" className="container">
+      <SearchCategories />
+      {content}
+    </section>
+  );
+};
 
 export default ExplorePage;

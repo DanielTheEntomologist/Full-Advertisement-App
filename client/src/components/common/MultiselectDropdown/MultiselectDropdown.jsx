@@ -9,6 +9,7 @@ import {
   faCheck,
   faListCheck,
   faSquare,
+  faFilter,
   faSquareCheck,
   faSearch,
   faCaretDown,
@@ -50,7 +51,7 @@ const MultiselectDropdown = () => {
 
   return (
     <div className={clsx(styles.multiselect)}>
-      <FontAwesomeIcon className={styles.icon} icon={faListUl} />
+      <FontAwesomeIcon className={styles.icon} icon={faFilter} />
       <div
         className={clsx(
           styles.category_select,

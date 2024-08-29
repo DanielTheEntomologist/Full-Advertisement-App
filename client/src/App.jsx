@@ -1,7 +1,8 @@
 import { useState } from "react";
-import "./components/layout/MainLayout/MainLayout";
-import MainLayout from "./components/layout/MainLayout/MainLayout.jsx";
 
+import { Route, Routes } from "react-router-dom";
+
+import MainLayout from "./components/layout/MainLayout/MainLayout.jsx";
 import ExplorePage from "./components/pages/Explore/ExplorePage.jsx";
 import LoginPage from "./components/pages/LoginPage/LoginPage.jsx";
 
@@ -10,8 +11,14 @@ function App() {
 
   return (
     <MainLayout>
-      <ExplorePage />
-      <LoginPage />
+      <Routes>
+        <Route path="/explore" element={<ExplorePage />} />
+        <Route path="/login" element={<LoginPage entryPoint={"login"} />} />
+        <Route
+          path="/register"
+          element={<LoginPage entryPoint={"register"} />}
+        />
+      </Routes>
     </MainLayout>
   );
 }

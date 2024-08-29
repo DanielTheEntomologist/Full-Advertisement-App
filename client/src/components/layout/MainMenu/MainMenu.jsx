@@ -44,7 +44,7 @@ const MainMenu = () => {
               </NavLink>
             </NavItem>
             <NavItem>
-              <NavLink href="/login">
+              <NavLink href="/register">
                 <Button outline color="primary">
                   Register
                 </Button>

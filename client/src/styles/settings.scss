@@ -34,3 +34,30 @@ $transition: all 0.5s;
     @content;
   }
 }
+
+$base-padding: 24px;
+
+$text-color: #2a2a2a;
+
+// COLOR PALLETTE
+$primary: #d58e32;
+$black: #000000;
+$dark-grey: #2a2a2a;
+$darker-grey: #363636;
+$white: #ffffff;
+$grey: #b6b6b6;
+$primary: #d58e32;
+$teal-tint: rgba(1, 2, 2, 0.2);
+$white-peach: rgb(247, 243, 243);
+
+$test-color: rgb(255, 0, 200);
+
+// COMPONENT & ELEMENT COLORS
+$form-border-color: $dark-grey;
+$form-border-color: $dark-grey;
+$form-searchbox-text-color: $dark-grey;
+$form-searchbox-placeholder-text-color: $dark-grey;
+$form-searchbox-icon-text-color: $primary;
+$form-border-width: 1px;
+$form-searchbox-bg-color: $white;
+$form-searchbox-hover-bg-color: $primary;

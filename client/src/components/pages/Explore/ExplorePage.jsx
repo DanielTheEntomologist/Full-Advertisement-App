@@ -11,7 +11,18 @@ import AdCardPlaceholder from "../../common/AdCardPlaceholder/AdCardPlaceholder"
 import SearchCategories from "../../common/SearchCategories/SearchCategories";
 
 const ExplorePage = ({}) => {
-  const [ads, setAds] = useState([]);
+  const [ads, setAds] = useState([
+    { id: "placeholder1" },
+    { id: "placeholder2" },
+    { id: "placeholder3" },
+    { id: "placeholder4" },
+    { id: "placeholder5" },
+    { id: "placeholder6" },
+    { id: "placeholder7" },
+    { id: "placeholder8" },
+    { id: "placeholder9" },
+    { id: "placeholder10" },
+  ]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -25,28 +36,26 @@ const ExplorePage = ({}) => {
     }, 2000);
   }, []);
 
-  const dummyAds = Array.from({ length: 10 }, (_, i) => i + 1); // Creates an array [1, 2, 3, ..., 10]
-  let content = (
+  // const dummyAds = Array.from({ length: 10 }, (_, i) => i + 1); // Creates an array [1, 2, 3, ..., 10]
+  // let content = (
+  //   <Row>
+  //     {dummyAds.map((id) => (
+  //       <Col xs={12} sm={6} md={4} lg={3} key={"loading" + id} className="my-2">
+  //         <AdCard loading={true} />
+  //       </Col>
+  //     ))}
+  //   </Row>
+  // );
+
+  const content = (
     <Row>
-      {dummyAds.map((id) => (
-        <Col xs={12} sm={6} md={4} lg={3} key={"loading" + id} className="my-2">
-          <AdCardPlaceholder />
+      {ads.map((ad) => (
+        <Col xs={12} sm={6} md={4} lg={3} key={ad.id} className="my-2">
+          <AdCard ad={ad} loading={loading} />
         </Col>
       ))}
     </Row>
   );
-
-  if (!loading) {
-    content = (
-      <Row>
-        {ads.map((ad) => (
-          <Col xs={12} sm={6} md={4} lg={3} key={ad.id} className="my-2">
-            <AdCard ad={ad} />
-          </Col>
-        ))}
-      </Row>
-    );
-  }
 
   return (
     <section id="explore-page" className="container">

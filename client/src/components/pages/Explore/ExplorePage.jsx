@@ -16,12 +16,6 @@ const ExplorePage = ({}) => {
     { id: "placeholder2" },
     { id: "placeholder3" },
     { id: "placeholder4" },
-    { id: "placeholder5" },
-    { id: "placeholder6" },
-    { id: "placeholder7" },
-    { id: "placeholder8" },
-    { id: "placeholder9" },
-    { id: "placeholder10" },
   ]);
   const [loading, setLoading] = useState(true);
 

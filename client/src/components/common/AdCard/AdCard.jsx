@@ -13,7 +13,7 @@ import styles from "./AdCard.module.scss";
 const imgPlaceholder = () => (
   <Placeholder
     tag="div"
-    color="primary"
+    color="secondary"
     animation="glow"
     width="100%"
     className={styles.adImage}

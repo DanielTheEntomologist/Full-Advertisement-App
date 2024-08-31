@@ -3,6 +3,9 @@ import React from "react";
 import { Row, Col } from "reactstrap";
 import { useState, useEffect } from "react";
 
+import { addMultiple, selectAdById } from "../../../redux/ads";
+import { useDispatch, useSelector } from "react-redux"; // Import from @reduxjs/toolkit
+
 // import styles from "./ExplorePage.module.scss";
 
 import mockAds from "../../common/AdCard/MockAds";
@@ -14,13 +17,16 @@ import { nanoid } from "@reduxjs/toolkit";
 const ExplorePage = ({}) => {
   const [ads, setAds] = useState([{}, {}, {}, {}]);
   const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
+
+  // const selectedAd = useSelector((state) => selectAdById(state, 3));
 
   useEffect(() => {
     const timeout = setTimeout(() => {
       console.log("Loading ads...");
-
       setLoading(false);
       setAds(mockAds);
+      dispatch(addMultiple(mockAds));
 
       return () => clearTimeout(timeout);
     }, 2000);

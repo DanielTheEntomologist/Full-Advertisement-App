@@ -7,16 +7,12 @@ import { useState, useEffect } from "react";
 
 import mockAds from "../../common/AdCard/MockAds";
 import AdCard from "../../common/AdCard/AdCard";
-import AdCardPlaceholder from "../../common/AdCardPlaceholder/AdCardPlaceholder";
+
 import SearchCategories from "../../common/SearchCategories/SearchCategories";
+import { nanoid } from "@reduxjs/toolkit";
 
 const ExplorePage = ({}) => {
-  const [ads, setAds] = useState([
-    { id: "placeholder1" },
-    { id: "placeholder2" },
-    { id: "placeholder3" },
-    { id: "placeholder4" },
-  ]);
+  const [ads, setAds] = useState([{}, {}, {}, {}]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -44,7 +40,14 @@ const ExplorePage = ({}) => {
   const content = (
     <Row>
       {ads.map((ad) => (
-        <Col xs={12} sm={6} md={4} lg={3} key={ad.id} className="my-2">
+        <Col
+          xs={12}
+          sm={6}
+          md={4}
+          lg={3}
+          key={ad.id ? ad.id : "placeholder" + nanoid()}
+          className="my-2"
+        >
           <AdCard ad={ad} loading={loading} />
         </Col>
       ))}

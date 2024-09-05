@@ -18,7 +18,13 @@ router.post(
 );
 
 router.delete("/ads/:id", authMiddleware.isAuthorised, adController.delete);
-router.patch("/ads/:id", authMiddleware.isAuthorised, adController.update);
+router.patch(
+  "/ads/:id",
+  authMiddleware.isAuthorised,
+  uploadImage.uploadFile.single("image"),
+  adValidator.update,
+  adController.update
+);
 
 router.get("/ads/search/:searchPhrase", adController.search);
 

@@ -5,7 +5,8 @@ const { deleteFile } = require("../utils/deleteFile");
 exports.add = async (req, res) => {
   let image = "";
   try {
-    const { title, content, date, price, location, seller } = req.body;
+    const { title, content, date, price, location, locationCoords, seller } =
+      req.body;
     image = req.file ? req.file.path : "";
 
     if (seller !== req.session.user._id) {
@@ -22,6 +23,8 @@ exports.add = async (req, res) => {
       return;
     }
 
+    const coordsParsed = JSON.parse(locationCoords);
+
     const newAd = await new Ad({
       title: title,
       content: content,
@@ -30,6 +33,7 @@ exports.add = async (req, res) => {
       price: price,
 
       location: location,
+      locationCoords: coordsParsed,
       seller: seller,
     });
 
@@ -88,10 +92,15 @@ exports.delete = async (req, res) => {
 };
 
 exports.update = async (req, res) => {
+  // console.log("ad.update");
+  // console.log(req.body);
   try {
     const adId = req.params.id;
     const ad = await Ad.findById(adId);
 
+    // console.log("ad.update", ad);
+
+    // check request validity
     if (!ad) {
       res.status(404).json({ message: "ad not found" });
       return;
@@ -105,7 +114,7 @@ exports.update = async (req, res) => {
 
     if (
       req.body.title &&
-      (await Ad.findOne({ title: body.title, seller: ad.seller }))
+      (await Ad.findOne({ title: req.body.title, seller: ad.seller }))
     ) {
       res.status(409).json({
         message:
@@ -115,12 +124,22 @@ exports.update = async (req, res) => {
       return;
     }
 
-    Object.assign(ad, req.body);
-    if (image) {
-      ad.image = image;
+    // modify ad object
+    ad.set(req.body);
+    // console.log("req.body", req.body);
+
+    if (req.body.locationCoords) {
+      const coordsParsed = JSON.parse(req.body.locationCoords);
+      ad.set({ locationCoords: coordsParsed });
     }
 
-    ad.save();
+    if (image) {
+      ad.set({ image: image });
+    }
+
+    console.log("ad.updated", ad);
+
+    await ad.save();
 
     res.status(200).json({ message: "ad updated" });
   } catch (err) {

@@ -29,6 +29,10 @@ const adSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  locationCoords: {
+    type: Array,
+    required: false,
+  },
   seller: {
     type: String,
     required: true,

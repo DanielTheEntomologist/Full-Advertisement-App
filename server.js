@@ -26,6 +26,12 @@ app.use(
     saveUninitialized: false,
   })
 );
+if (process.env.INTENTIONAL_DELAY > 0) {
+  app.use(function (req, res, next) {
+    setTimeout(next, process.env.INTENTIONAL_DELAY);
+  });
+}
+
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 // app.use(conditionalFormidable);

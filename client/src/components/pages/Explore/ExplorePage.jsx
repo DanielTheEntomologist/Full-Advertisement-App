@@ -3,8 +3,10 @@ import React from "react";
 import { Row, Col } from "reactstrap";
 import { useState, useEffect } from "react";
 
-import { addMultiple, selectAdById } from "../../../redux/ads";
+import { addMultiple, selectAdById, sellectAllAds } from "../../../redux/ads";
 import { useDispatch, useSelector } from "react-redux"; // Import from @reduxjs/toolkit
+
+import { fetchAds } from "../../../redux/ads";
 
 // import styles from "./ExplorePage.module.scss";
 
@@ -15,18 +17,25 @@ import SearchCategories from "../../common/SearchCategories/SearchCategories";
 import { nanoid } from "@reduxjs/toolkit";
 
 const ExplorePage = ({}) => {
-  const [ads, setAds] = useState([{}, {}, {}, {}]);
+  // const [ads, setAds] = useState([{}, {}, {}, {}]);
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
 
-  // const selectedAd = useSelector((state) => selectAdById(state, 3));
+  const allAds = useSelector((state) => sellectAllAds(state));
+
+  let ads = [{}, {}, {}, {}];
+  if (allAds.length > 0) {
+    ads = allAds;
+  }
 
   useEffect(() => {
     const timeout = setTimeout(() => {
       console.log("Loading ads...");
+
+      // setAds(mockAds);
+      // dispatch(addMultiple(mockAds));
+      dispatch(fetchAds());
       setLoading(false);
-      setAds(mockAds);
-      dispatch(addMultiple(mockAds));
 
       return () => clearTimeout(timeout);
     }, 2000);

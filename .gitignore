@@ -6,3 +6,5 @@ secrets.js
 nodemon.json
 kodillamodule/
 reword-commits.sh
+mockAdsFordb.json
+.vscode/

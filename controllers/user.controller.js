@@ -79,8 +79,8 @@ exports.add = async (req, res) => {
 /****** LOGIN USER ********/
 exports.login = async (req, res) => {
   try {
-    console.log("user.login");
     const { login, password } = req.body;
+    console.log("user.login ", login);
 
     const user = await User.findOne({ login: login });
 
@@ -143,6 +143,7 @@ exports.current = async (req, res) => {
 /****** LOGOUT USER ********/
 const logout = async (req, res) => {
   try {
+    console.log("user.logout ", req.session.user.login);
     if (process.env.NODE_ENV !== "production") await Session.deleteMany({});
 
     req.session.destroy();

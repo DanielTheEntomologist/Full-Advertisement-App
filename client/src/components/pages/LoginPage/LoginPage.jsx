@@ -3,6 +3,10 @@ import React from "react";
 import clsx from "clsx";
 import { Row, Col, Container } from "reactstrap";
 
+import { login, logout } from "/src/redux/auth";
+import { useDispatch, useSelector } from "react-redux";
+import { currentUser } from "/src/redux/auth";
+
 import styles from "./LoginPage.module.scss";
 
 const API_URL = "http://localhost:5000";
@@ -13,8 +17,16 @@ const LoginPage = ({ entryPoint }) => {
     activeTab = entryPoint;
   }
 
+  const user = useSelector(currentUser);
+  const dispatch = useDispatch();
+  const loggedIn = user.status === "authorized";
+
   return (
-    <section id="login-page" className="container">
+    <section
+      id="login-page"
+      className="container"
+      style={loggedIn ? { backgroundColor: "green" } : { "": "" }}
+    >
       This is the login page
       <div className={clsx("row justify-content-center", styles.formBody)}>
         <div className="col-md-6">
@@ -100,7 +112,24 @@ const LoginPage = ({ entryPoint }) => {
                         Remember me
                       </label>
                     </div>
-                    <button type="submit" className="btn btn-primary w-100">
+                    <button
+                      // type="submit"
+                      type="button"
+                      className="btn btn-primary w-100"
+                      onClick={() => {
+                        event.preventDefault();
+                        if (loggedIn) {
+                          dispatch(logout());
+                        } else {
+                          dispatch(
+                            login({
+                              login: "testUser3",
+                              password: "testPassword2",
+                            })
+                          );
+                        }
+                      }}
+                    >
                       Login
                     </button>
                   </form>

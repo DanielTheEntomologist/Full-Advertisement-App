@@ -40,6 +40,7 @@ const unauthorizedUserState = {
   password: null,
   userData: null,
   status: "unauthorized",
+  pendingAction: null,
   error: null,
 };
 
@@ -53,12 +54,13 @@ const setAsLoggedInReducer = (state, action) => {
   return state;
 };
 const setAsLoggedOutReducer = (state) => {
-  // state = ;
-  return unauthorizedUserState;
+  // use object.assign to preserve the reference to the state draft object
+  // otherwise the state changes will be lost
+  return Object.assign(state, unauthorizedUserState);
 };
 
 const authSlice = createSlice({
-  name: "user",
+  name: "auth",
   initialState: unauthorizedUserState,
 
   reducers: {
@@ -71,29 +73,30 @@ const authSlice = createSlice({
   extraReducers: (builder) => {
     // login cases
     builder.addCase(login.pending, (state) => {
-      state.status = "authorizing";
+      state.pendingAction = "login";
     });
     builder.addCase(login.fulfilled, (state, action) => {
-      state.status = "authorized";
       console.log("login.fulfilled", action.payload);
-
-      state = setAsLoggedInReducer(state, action);
+      state.pendingAction = null;
+      setAsLoggedInReducer(state, action);
     });
     builder.addCase(login.rejected, (state, action) => {
-      state.status = "failed authorization";
+      state.pendingAction = null;
       console.log("login.rejected", action.error.message);
       state.error = action.error.message;
     });
     // logout cases
     builder.addCase(logout.pending, (state) => {
-      state.status = "logging out";
+      state.pendingAction = "logout";
     });
     builder.addCase(logout.fulfilled, (state, action) => {
-      console.log("loggout.fullfilled", action.payload);
-      state = setAsLoggedOutReducer(state);
+      console.log("logout.fullfilled", action.payload);
+      state.pendingAction = null;
+      setAsLoggedOutReducer(state);
+      console.log("state after logout fullfilled", state);
     });
     builder.addCase(logout.rejected, (state, action) => {
-      state.status = "failed logout";
+      state.pendingAction = null;
       state.error = action.error.message;
     });
   },

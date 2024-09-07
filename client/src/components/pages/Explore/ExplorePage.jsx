@@ -10,7 +10,6 @@ import { fetchAds } from "../../../redux/ads";
 
 // import styles from "./ExplorePage.module.scss";
 
-import mockAds from "../../common/AdCard/MockAds";
 import AdCard from "../../common/AdCard/AdCard";
 
 import SearchCategories from "../../common/SearchCategories/SearchCategories";
@@ -29,16 +28,12 @@ const ExplorePage = ({}) => {
   }
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      console.log("Loading ads...");
+    console.log("Loading ads...");
+    dispatch(fetchAds());
 
-      // setAds(mockAds);
-      // dispatch(addMultiple(mockAds));
-      dispatch(fetchAds());
-      setLoading(false);
+    setLoading(false);
 
-      return () => clearTimeout(timeout);
-    }, 2000);
+    return () => {};
   }, []);
 
   // const dummyAds = Array.from({ length: 10 }, (_, i) => i + 1); // Creates an array [1, 2, 3, ..., 10]

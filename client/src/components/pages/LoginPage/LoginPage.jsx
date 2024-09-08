@@ -1,33 +1,14 @@
-import React from "react";
-
+import React, { useState } from "react";
 import clsx from "clsx";
-import { Row, Col, Container } from "reactstrap";
-
-import { login, logout } from "/src/redux/auth";
-import { useDispatch, useSelector } from "react-redux";
-import { currentUser } from "/src/redux/auth";
-
 import styles from "./LoginPage.module.scss";
+import LoginForm from "../../features/LoginForm/LoginForm";
+import RegisterForm from "../../features/RegisterForm/RegisterForm";
 
-const API_URL = "http://localhost:5000";
-
-let activeTab = "login";
 const LoginPage = ({ entryPoint }) => {
-  if (entryPoint !== undefined) {
-    activeTab = entryPoint;
-  }
-
-  const user = useSelector(currentUser);
-  const dispatch = useDispatch();
-  const loggedIn = user.status === "authorized";
+  const [activeTab, setActiveTab] = useState(entryPoint || "login");
 
   return (
-    <section
-      id="login-page"
-      className="container"
-      style={loggedIn ? { backgroundColor: "green" } : { "": "" }}
-    >
-      This is the login page
+    <section id="login-page" className="container">
       <div className={clsx("row justify-content-center", styles.formBody)}>
         <div className="col-md-6">
           <div className="card">
@@ -36,7 +17,7 @@ const LoginPage = ({ entryPoint }) => {
                 <li className="nav-item" role="presentation">
                   <button
                     className={clsx(
-                      "nav-link ",
+                      "nav-link",
                       activeTab === "login" ? "active" : ""
                     )}
                     id="login-tab"
@@ -46,6 +27,7 @@ const LoginPage = ({ entryPoint }) => {
                     role="tab"
                     aria-controls="login"
                     aria-selected="true"
+                    onClick={() => setActiveTab("login")}
                   >
                     Login
                   </button>
@@ -53,7 +35,7 @@ const LoginPage = ({ entryPoint }) => {
                 <li className="nav-item" role="presentation">
                   <button
                     className={clsx(
-                      "nav-link ",
+                      "nav-link",
                       activeTab === "register" ? "active" : ""
                     )}
                     id="register-tab"
@@ -63,154 +45,14 @@ const LoginPage = ({ entryPoint }) => {
                     role="tab"
                     aria-controls="register"
                     aria-selected="false"
+                    onClick={() => setActiveTab("register")}
                   >
                     Register
                   </button>
                 </li>
               </ul>
               <div className="tab-content" id="myTabContent">
-                <div
-                  className={clsx(
-                    "tab-pane fade ",
-                    activeTab === "login" ? "show active" : ""
-                  )}
-                  id="login"
-                  role="tabpanel"
-                  aria-labelledby="login-tab"
-                >
-                  <h2 className="text-center mb-4">Login to DreamScape</h2>
-                  <form action={API_URL + "/auth/login"} method="POST">
-                    <div className="mb-3">
-                      <label htmlFor="loginEmail" className="form-label">
-                        Email address
-                      </label>
-                      <input
-                        type="email"
-                        className="form-control"
-                        id="loginEmail"
-                        required
-                      />
-                    </div>
-                    <div className="mb-3">
-                      <label htmlFor="loginPassword" className="form-label">
-                        Password
-                      </label>
-                      <input
-                        type="password"
-                        className="form-control"
-                        id="loginPassword"
-                        required
-                      />
-                    </div>
-                    <div className="mb-3 form-check">
-                      <input
-                        type="checkbox"
-                        className="form-check-input"
-                        id="rememberMe"
-                      />
-                      <label className="form-check-label" htmlFor="rememberMe">
-                        Remember me
-                      </label>
-                    </div>
-                    <button
-                      // type="submit"
-                      type="button"
-                      className="btn btn-primary w-100"
-                      onClick={() => {
-                        event.preventDefault();
-                        if (loggedIn) {
-                          dispatch(logout());
-                        } else {
-                          dispatch(
-                            login({
-                              login: "testUser3",
-                              password: "testPassword2",
-                            })
-                          );
-                        }
-                      }}
-                    >
-                      Login
-                    </button>
-                  </form>
-                </div>
-                <div
-                  className={clsx(
-                    "tab-pane fade",
-                    activeTab === "register" ? "show active" : ""
-                  )}
-                  id="register"
-                  role="tabpanel"
-                  aria-labelledby="register-tab"
-                >
-                  <h2 className="text-center mb-4">Join DreamScape</h2>
-                  <form action={API_URL + "/auth/register"} method="POST">
-                    <div className="mb-3">
-                      <label htmlFor="registerName" className="form-label">
-                        Full Name
-                      </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="registerName"
-                        required
-                      />
-                    </div>
-                    <div className="mb-3">
-                      <label htmlFor="registerEmail" className="form-label">
-                        Email address
-                      </label>
-                      <input
-                        type="email"
-                        className="form-control"
-                        id="registerEmail"
-                        required
-                      />
-                    </div>
-                    <div className="mb-3">
-                      <label htmlFor="registerPassword" className="form-label">
-                        Password
-                      </label>
-                      <input
-                        type="password"
-                        className="form-control"
-                        id="registerPassword"
-                        required
-                      />
-                    </div>
-                    <div className="mb-3">
-                      <label
-                        htmlFor="registerConfirmPassword"
-                        className="form-label"
-                      >
-                        Confirm Password
-                      </label>
-                      <input
-                        type="password"
-                        className="form-control"
-                        id="registerConfirmPassword"
-                        required
-                      />
-                    </div>
-                    <div className="mb-3 form-check">
-                      <input
-                        type="checkbox"
-                        className="form-check-input"
-                        id="agreeTerms"
-                        required
-                      />
-                      <label className="form-check-label" htmlFor="agreeTerms">
-                        I agree to the{" "}
-                        <a href="https://realm-of-imagination.net/terms">
-                          Terms and Conditions
-                        </a>
-                      </label>
-                    </div>
-                    <button type="submit" className="btn btn-primary w-100">
-                      Register
-                    </button>
-                  </form>
-                </div>
+                {activeTab === "login" ? <LoginForm /> : <RegisterForm />}
               </div>
             </div>
           </div>

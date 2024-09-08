@@ -24,6 +24,7 @@ export const login = createAsyncThunk(
     return data;
   }
 );
+
 export const logout = createAsyncThunk("auth/logout", async () => {
   const response = await fetch(API_URL + COLLECTION_NAME + "/logout", {
     method: "DELETE",
@@ -31,6 +32,15 @@ export const logout = createAsyncThunk("auth/logout", async () => {
 
   const data = await response.json();
   console.log("logout response data", data);
+  return data;
+});
+
+export const fetchCurrentUser = createAsyncThunk("auth/user", async ({}) => {
+  const response = await fetch(API_URL + COLLECTION_NAME + "/user", {
+    method: "GET",
+  });
+
+  const data = await response.json();
   return data;
 });
 

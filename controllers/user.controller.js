@@ -101,7 +101,7 @@ exports.login = async (req, res) => {
     }
 
     req.session.user = user;
-    res.json({ message: "Login Succesful" });
+    res.json({ message: "Login Succesful", user: user });
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "problem with logging in user" });
@@ -133,7 +133,7 @@ exports.remove = async (req, res) => {
 exports.current = async (req, res) => {
   try {
     console.log("user.current", req.session.user);
-    res.json({ message: "Current user is: " + req.session.user.login });
+    res.json(req.session.user);
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "problem with getting current user" });

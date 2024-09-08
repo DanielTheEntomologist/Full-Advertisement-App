@@ -2,9 +2,9 @@ const express = require("express");
 const router = express.Router();
 
 const user = require("../controllers/user.controller");
-const { filterCredentials } = require("../utils/filterCredentials");
+const filterResponse = require("../utils/filterResponse");
 
-router.get("/users", filterCredentials, user.getAll);
-router.get("/users/:id", filterCredentials, user.get);
+router.get("/users", filterResponse.filterCredentials, user.getAll);
+router.get("/users/:id", filterResponse.filterCredentials, user.get);
 
 module.exports = router;

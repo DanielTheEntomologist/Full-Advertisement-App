@@ -1,6 +1,7 @@
 import { useState } from "react";
 import logo from "/src/assets/logoPlaceholder.png";
 import Logo from "/src/components/common/Logo/Logo";
+import { NavLink } from "react-router-dom";
 
 import {
   Button,
@@ -10,8 +11,11 @@ import {
   NavbarBrand,
   Nav,
   NavItem,
-  NavLink,
 } from "reactstrap";
+
+<NavLink to="/register" className="nav-link">
+  Don't have an account? Register
+</NavLink>;
 
 const MainMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -23,28 +27,34 @@ const MainMenu = () => {
   return (
     <div>
       <Navbar color="dark" dark expand="md">
-        <NavbarBrand href="/">
-          <Logo src={logo} />
-          AdMarket
-        </NavbarBrand>
+        <NavLink to="/">
+          <NavbarBrand>
+            <Logo src={logo} />
+            AdMarket
+          </NavbarBrand>
+        </NavLink>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className="ms-auto align-items-center" navbar>
             <NavItem>
-              <NavLink href="/">Home</NavLink>
+              <NavLink to="/" className="nav-link">
+                Home
+              </NavLink>
             </NavItem>
             <NavItem>
-              <NavLink href="/ads">Explore</NavLink>
+              <NavLink to="/ads" className="nav-link">
+                Explore
+              </NavLink>
             </NavItem>
             <NavItem>
-              <NavLink href="/login">
+              <NavLink to="/login">
                 <Button outline color="primary">
                   Login
                 </Button>
               </NavLink>
             </NavItem>
             <NavItem>
-              <NavLink href="/register">
+              <NavLink to="/register">
                 <Button outline color="primary">
                   Register
                 </Button>

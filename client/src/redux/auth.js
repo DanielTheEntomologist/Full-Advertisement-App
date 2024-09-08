@@ -56,9 +56,8 @@ const unauthorizedUserState = {
 
 const setAsLoggedInReducer = (state, action) => {
   console.log("setAsLoggedInReducer", action.payload);
-  const user = action.payload;
-  const { id } = user;
-  state.id = id;
+  const user = action.payload.user;
+  user.id = user._id;
   state.userData = user;
   state.status = "authorized";
   return state;

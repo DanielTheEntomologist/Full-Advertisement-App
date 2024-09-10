@@ -20,7 +20,7 @@ export const login = createAsyncThunk(
     });
 
     const data = await response.json();
-    console.log("login response data", data);
+
     return data;
   }
 );
@@ -31,7 +31,7 @@ export const logout = createAsyncThunk("auth/logout", async () => {
   });
 
   const data = await response.json();
-  console.log("logout response data", data);
+
   return data;
 });
 
@@ -55,7 +55,6 @@ const unauthorizedUserState = {
 };
 
 const setAsLoggedInReducer = (state, action) => {
-  console.log("setAsLoggedInReducer", action.payload);
   const user = action.payload.user;
   user.id = user._id;
   state.id = user.id;
@@ -92,13 +91,12 @@ const authSlice = createSlice({
       state.pendingAction = "login";
     });
     builder.addCase(login.fulfilled, (state, action) => {
-      console.log("login.fulfilled", action.payload);
       state.pendingAction = null;
       setAsLoggedInReducer(state, action);
     });
     builder.addCase(login.rejected, (state, action) => {
       state.pendingAction = null;
-      console.log("login.rejected", action.error.message);
+
       state.error = action.error.message;
     });
     // logout cases
@@ -106,10 +104,8 @@ const authSlice = createSlice({
       state.pendingAction = "logout";
     });
     builder.addCase(logout.fulfilled, (state, action) => {
-      console.log("logout.fullfilled", action.payload);
       state.pendingAction = null;
       setAsLoggedOutReducer(state);
-      console.log("state after logout fullfilled", state);
     });
     builder.addCase(logout.rejected, (state, action) => {
       state.pendingAction = null;

@@ -58,8 +58,11 @@ const setAsLoggedInReducer = (state, action) => {
   console.log("setAsLoggedInReducer", action.payload);
   const user = action.payload.user;
   user.id = user._id;
+  state.id = user.id;
+  state.loginName = user.login;
   state.userData = user;
   state.status = "authorized";
+  state.pendingAction = null;
   return state;
 };
 const setAsLoggedOutReducer = (state) => {
@@ -78,7 +81,11 @@ const authSlice = createSlice({
   },
   selectors: {
     currentUser: (state) => state,
+    loginName: (state) => state.loginName,
+    loginStatus: (state) => state.status,
+    pendingAction: (state) => state.pendingAction,
   },
+
   extraReducers: (builder) => {
     // login cases
     builder.addCase(login.pending, (state) => {
@@ -113,4 +120,5 @@ const authSlice = createSlice({
 
 export default authSlice;
 // export const { addMultiple, login } = authSlice.actions;
-export const { currentUser } = authSlice.selectors;
+export const { currentUser, loginName, loginStatus, pendingAction } =
+  authSlice.selectors;

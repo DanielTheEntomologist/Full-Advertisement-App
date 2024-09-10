@@ -1,7 +1,11 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
+
 import logo from "/src/assets/logoPlaceholder.png";
 import Logo from "/src/components/common/Logo/Logo";
 import { NavLink } from "react-router-dom";
+
+import { loginStatus, loginName, logout } from "/src/redux/auth.js";
 
 import {
   Button,
@@ -13,26 +17,70 @@ import {
   NavItem,
 } from "reactstrap";
 
-<NavLink to="/register" className="nav-link">
-  Don't have an account? Register
-</NavLink>;
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser, faPowerOff } from "@fortawesome/free-solid-svg-icons";
 
 const MainMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
+
+  const authStatus = useSelector(loginStatus);
+  const userName = useSelector(loginName);
+
+  const isAuthorized = authStatus === "authorized";
 
   const toggle = () => {
     setIsOpen(!isOpen);
   };
 
+  let userButton = null;
+  let registerButton = null;
+  let userNameButton = null;
+  let logoutButton = null;
+
+  console.log("Rendering MainMenu with isAuthorized", isAuthorized);
+
+  if (!isAuthorized) {
+    userButton = (
+      <NavLink to="/login">
+        <Button outline color="primary">
+          Login
+        </Button>
+      </NavLink>
+    );
+    registerButton = (
+      <NavLink to="/register">
+        <Button outline color="primary">
+          Register
+        </Button>
+      </NavLink>
+    );
+  }
+  if (isAuthorized) {
+    userNameButton = (
+      <NavLink to="/profile">
+        <Button outline color="primary">
+          <FontAwesomeIcon icon={faUser} />
+          <span> </span>
+          {userName}
+        </Button>
+      </NavLink>
+    );
+    logoutButton = (
+      <NavLink to="/logout">
+        <Button outline color="primary">
+          <FontAwesomeIcon icon={faPowerOff} /> Logout
+        </Button>
+      </NavLink>
+    );
+  }
   return (
     <div>
       <Navbar color="dark" dark expand="md">
-        <NavLink to="/">
-          <NavbarBrand>
-            <Logo src={logo} />
-            AdMarket
-          </NavbarBrand>
-        </NavLink>
+        <NavbarBrand src={logo}>
+          <Logo src={logo} />
+          AdMarket
+        </NavbarBrand>
+
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className="ms-auto align-items-center" navbar>
@@ -46,20 +94,10 @@ const MainMenu = () => {
                 Explore
               </NavLink>
             </NavItem>
-            <NavItem>
-              <NavLink to="/login">
-                <Button outline color="primary">
-                  Login
-                </Button>
-              </NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink to="/register">
-                <Button outline color="primary">
-                  Register
-                </Button>
-              </NavLink>
-            </NavItem>
+            <NavItem>{userButton}</NavItem>
+            <NavItem>{registerButton}</NavItem>
+            <NavItem>{userNameButton}</NavItem>
+            <NavItem>{logoutButton}</NavItem>
           </Nav>
         </Collapse>
       </Navbar>

@@ -1,21 +1,29 @@
 import React, { useState } from "react";
 import styles from "./RegisterForm.module.scss";
+import { useDispatch } from "react-redux";
+import { registerUser } from "../../../redux/auth";
 
 const RegisterForm = () => {
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     registerName: "",
     registerEmail: "",
+    avatarImage: "",
+    registerPhone: "",
     registerPassword: "",
     registerConfirmPassword: "",
     agreeTerms: false,
   });
 
   const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value, type, checked, files } = e.target;
+    // console.log(e.target);
     setFormData({
       ...formData,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: type === "file" && files.length > 0 ? files[0].name : value,
+      // for some reason files[0] is undefined but files[0].name returns the File object
     });
+    // console.log(formData);
   };
 
   const handleSubmit = (e) => {
@@ -23,6 +31,21 @@ const RegisterForm = () => {
     const form = e.target;
     if (form.reportValidity()) {
       // Handle registration logic
+
+      const payload = {
+        login: formData.registerName,
+        password: formData.registerPassword,
+        avatar: formData.avatarImage,
+        phone: formData.registerPhone,
+        email: formData.registerEmail,
+      };
+      for (const key in payload) {
+        if (!payload[key]) {
+          delete payload[key];
+        }
+      }
+
+      dispatch(registerUser(payload));
     }
   };
 
@@ -32,7 +55,7 @@ const RegisterForm = () => {
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label htmlFor="registerName" className="form-label">
-            Full Name
+            Login Name
           </label>
           <input
             type="text"
@@ -58,6 +81,21 @@ const RegisterForm = () => {
             required
           />
         </div>
+
+        <div className="mb-3">
+          <label htmlFor="avatarImage" className="form-label">
+            Avatar Image
+          </label>
+          <input
+            type="file"
+            className="form-control"
+            id="avatarImage"
+            name="avatarImage"
+            accept=".jpg,.jpeg,.png"
+            onChange={handleInputChange}
+          />
+        </div>
+
         <div className="mb-3">
           <label htmlFor="registerPassword" className="form-label">
             Password

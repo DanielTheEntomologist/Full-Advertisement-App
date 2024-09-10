@@ -39,7 +39,7 @@ exports.add = async (req, res) => {
       return;
     }
 
-    const { login, password, phone } = req.body;
+    const { login, password, phone, email } = req.body;
     const avatar = req.file ? req.file.path : "";
 
     // console.log("avatar", avatar);
@@ -61,6 +61,7 @@ exports.add = async (req, res) => {
       password: hashedPassword,
       avatar,
       phone,
+      email,
       salt,
     });
 

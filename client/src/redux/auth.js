@@ -44,6 +44,27 @@ export const fetchCurrentUser = createAsyncThunk("auth/user", async ({}) => {
   return data;
 });
 
+export const registerUser = createAsyncThunk(
+  "auth/register",
+  async ({ login, password, avatar, phone, email }) => {
+    const formData = new FormData();
+    formData.append("login", login);
+    formData.append("password", password);
+    formData.append("avatar", avatar); // Assuming avatar is a File object
+    formData.append("phone", phone);
+    formData.append("email", email);
+
+    const response = await fetch(API_URL + COLLECTION_NAME + "/register", {
+      method: "POST",
+      body: formData,
+    });
+
+    const data = await response.json();
+
+    return data;
+  }
+);
+
 const unauthorizedUserState = {
   id: null,
   login: null,

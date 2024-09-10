@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import MainLayout from "./components/layout/MainLayout/MainLayout.jsx";
 import ExplorePage from "./components/pages/Explore/ExplorePage.jsx";
 import LoginPage from "./components/pages/LoginPage/LoginPage.jsx";
+import LogoutPage from "./components/pages/LogoutPage/LogoutPage.jsx";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           path="/register"
           element={<LoginPage entryPoint={"register"} />}
         />
+        <Route path="/logout" element={<LogoutPage />} />
         <Route path="/*" element={<h1>404 - Not Found</h1>} />
       </Routes>
     </MainLayout>

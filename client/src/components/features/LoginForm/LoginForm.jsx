@@ -1,6 +1,13 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { login } from "/src/redux/auth";
+import { useDispatch, useSelector } from "react-redux";
+import { login, loginStatus, pendingAction } from "/src/redux/auth";
+// import fontawesome component
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import checkmark icon
+import { faCheck } from "@fortawesome/free-solid-svg-icons";
+// import loading spinner
+import { Spinner } from "reactstrap";
+
 import styles from "./LoginForm.module.scss";
 
 const LoginForm = () => {
@@ -10,7 +17,28 @@ const LoginForm = () => {
     rememberMe: false,
   });
 
+  const action = useSelector(pendingAction);
+  const status = useSelector(loginStatus);
+
   const dispatch = useDispatch();
+
+  if (action === null && status === "authorized") {
+    return (
+      <div>
+        <FontAwesomeIcon icon={faCheck} />
+        You are logged in!
+      </div>
+    );
+  }
+
+  if (action === "login" && status === "unauthorized") {
+    return (
+      <div>
+        <Spinner />
+        Logging You in...
+      </div>
+    );
+  }
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -62,7 +90,7 @@ const LoginForm = () => {
             required
           />
         </div>
-        <div className="mb-3 form-check">
+        {/* <div className="mb-3 form-check">
           <input
             type="checkbox"
             className="form-check-input"
@@ -74,7 +102,7 @@ const LoginForm = () => {
           <label className="form-check-label" htmlFor="rememberMe">
             Remember me
           </label>
-        </div>
+        </div> */}
         <button type="submit" className="btn btn-primary w-100">
           Login
         </button>

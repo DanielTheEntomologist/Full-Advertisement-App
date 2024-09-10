@@ -5,7 +5,7 @@ import logo from "/src/assets/logoPlaceholder.png";
 import Logo from "/src/components/common/Logo/Logo";
 import { NavLink } from "react-router-dom";
 
-import { loginStatus, loginName, logout } from "/src/redux/auth.js";
+import { loginStatus, loginName } from "/src/redux/auth.js";
 
 import {
   Button,
@@ -36,8 +36,6 @@ const MainMenu = () => {
   let registerButton = null;
   let userNameButton = null;
   let logoutButton = null;
-
-  console.log("Rendering MainMenu with isAuthorized", isAuthorized);
 
   if (!isAuthorized) {
     userButton = (

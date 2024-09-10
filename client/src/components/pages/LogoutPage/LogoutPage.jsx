@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { logout, pendingAction, loginStatus } from "/src/redux/auth";
-import { Button } from "reactstrap";
+import { Button, Spinner } from "reactstrap";
 
 const LogoutPage = () => {
   const dispatch = useDispatch();
@@ -13,7 +13,12 @@ const LogoutPage = () => {
   }
 
   if (action === "logout" && status === "authorized") {
-    return <div>Logging You out...</div>;
+    return (
+      <div>
+        <Spinner />
+        Logging You out...
+      </div>
+    );
   }
 
   if (action === null && status === "unauthorized") {

@@ -6,6 +6,8 @@ const { validationResult } = require("express-validator");
 
 const { deleteFile } = require("../utils/deleteFile");
 
+const defaultAvatar = "uploads/default-avatar.png";
+
 /****** GET USER ********/
 exports.get = async (req, res) => {
   try {
@@ -40,7 +42,7 @@ exports.add = async (req, res) => {
     }
 
     const { login, password, phone, email } = req.body;
-    const avatar = req.file ? req.file.path : "";
+    const avatar = req.file ? req.file.path : defaultAvatar;
 
     // console.log("avatar", avatar);
 

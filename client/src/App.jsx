@@ -12,11 +12,8 @@ function App() {
         <Route path="/" element={<ExplorePage />} />
         <Route path="/ads" element={<ExplorePage />} />
         <Route path="/explore" element={<ExplorePage />} />
-        <Route path="/login" element={<LoginPage entryPoint={"login"} />} />
-        <Route
-          path="/register"
-          element={<LoginPage entryPoint={"register"} />}
-        />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<LoginPage />} />
         <Route path="/logout" element={<LogoutPage />} />
         <Route path="/*" element={<h1>404 - Not Found</h1>} />
       </Routes>

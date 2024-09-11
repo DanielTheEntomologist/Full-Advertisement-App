@@ -17,13 +17,12 @@ const RegisterForm = () => {
 
   const handleInputChange = (e) => {
     const { name, value, type, checked, files } = e.target;
-    // console.log(e.target);
+    ``;
     setFormData({
       ...formData,
       [name]: type === "file" && files.length > 0 ? files[0].name : value,
       // for some reason files[0] is undefined but files[0].name returns the File object
     });
-    // console.log(formData);
   };
 
   const handleSubmit = (e) => {

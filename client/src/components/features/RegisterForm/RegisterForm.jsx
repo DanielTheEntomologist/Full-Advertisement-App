@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 import styles from "./RegisterForm.module.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { registerUser, pendingAction, loginStatus } from "../../../redux/auth";
+import {
+  registerUser,
+  pendingAction,
+  loginStatus,
+  registerError as error,
+} from "../../../redux/auth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { Spinner } from "reactstrap";
@@ -20,6 +25,7 @@ const RegisterForm = () => {
 
   const action = useSelector(pendingAction);
   const status = useSelector(loginStatus);
+  const errorMessage = useSelector(error);
 
   if (action === "register" && status === "unauthorized") {
     return (
@@ -84,6 +90,9 @@ const RegisterForm = () => {
   return (
     <div className={styles.registerForm}>
       <h2 className="text-center mb-4">Join DreamScape</h2>
+      {errorMessage ? (
+        <div className="alert alert-danger">{errorMessage}</div>
+      ) : null}
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label htmlFor="registerName" className="form-label">

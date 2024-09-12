@@ -46,7 +46,7 @@ export const fetchCurrentUser = createAsyncThunk("auth/user", async ({}) => {
 
 export const registerUser = createAsyncThunk(
   "auth/register",
-  async ({ login, password, avatar, phone, email }, { dispatch }) => {
+  async ({ login, password, avatar, phone, email }) => {
     const formData = new FormData();
     formData.append("login", login);
     formData.append("password", password);
@@ -61,8 +61,6 @@ export const registerUser = createAsyncThunk(
 
     const data = await response.json();
 
-    await dispatch(loginUser({ login, password }));
-
     return data;
   }
 );
@@ -72,9 +70,11 @@ const unauthorizedUserState = {
   login: null,
   password: null,
   userData: null,
-  status: "unauthorized",
+  loginStatus: "unauthorized",
+  registerStatus: "unregistered",
   pendingAction: null,
-  error: null,
+  loginError: null,
+  registerError: null,
 };
 
 const setAsLoggedInReducer = (state, action) => {
@@ -83,8 +83,12 @@ const setAsLoggedInReducer = (state, action) => {
   state.id = user.id;
   state.loginName = user.login;
   state.userData = user;
-  state.status = "authorized";
+  state.loginStatus = "authorized";
+  state.registerStatus = "registered";
   state.pendingAction = null;
+  state.registerError = null;
+  state.logoutError = null;
+  state.loginError = null;
   return state;
 };
 const setAsLoggedOutReducer = (state) => {
@@ -104,23 +108,31 @@ const authSlice = createSlice({
   selectors: {
     currentUser: (state) => state,
     loginName: (state) => state.loginName,
-    loginStatus: (state) => state.status,
     pendingAction: (state) => state.pendingAction,
+    loginStatus: (state) => state.loginStatus,
+    registerStatus: (state) => state.registerStatus,
+    registerError: (state) => state.registerError,
+    logoutError: (state) => state.logoutError,
+    loginError: (state) => state.loginError,
   },
 
   extraReducers: (builder) => {
     // login cases
     builder.addCase(loginUser.pending, (state) => {
       state.pendingAction = "login";
+      state.loginError = null;
     });
     builder.addCase(loginUser.fulfilled, (state, action) => {
       state.pendingAction = null;
-      setAsLoggedInReducer(state, action);
+      if (action.payload.user) {
+        setAsLoggedInReducer(state, action);
+      } else {
+        state.loginError = action.payload.message;
+      }
     });
     builder.addCase(loginUser.rejected, (state, action) => {
       state.pendingAction = null;
-
-      state.error = action.error.message;
+      state.loginError = action.error.message;
     });
     // logout cases
     builder.addCase(logout.pending, (state) => {
@@ -128,28 +140,48 @@ const authSlice = createSlice({
     });
     builder.addCase(logout.fulfilled, (state, action) => {
       state.pendingAction = null;
-      setAsLoggedInReducer(state);
+      state.logoutError = null;
+
+      if (action.payload.message === "Logged out") {
+        setAsLoggedOutReducer(state);
+      } else {
+        state.loginError = action.payload.message;
+      }
     });
     builder.addCase(logout.rejected, (state, action) => {
       state.pendingAction = null;
-      state.error = action.error.message;
+      state.loginError = action.error.message;
     });
     // register cases
     builder.addCase(registerUser.pending, (state) => {
       state.pendingAction = "register";
+      state.registerError = null;
     });
     builder.addCase(registerUser.fulfilled, (state, action) => {
       state.pendingAction = null;
-      loginUser(state.login, state.password);
+
+      if (action.payload.user) {
+        state.registerStatus = "registered";
+      } else {
+        state.registerError = action.payload.message;
+      }
     });
     builder.addCase(registerUser.rejected, (state, action) => {
       state.pendingAction = null;
-      state.error = action.error.message;
+      state.registerError = action.error.message;
     });
   },
 });
 
 export default authSlice;
 // export const { addMultiple, login } = authSlice.actions;
-export const { currentUser, loginName, loginStatus, pendingAction } =
-  authSlice.selectors;
+export const {
+  currentUser,
+  loginName,
+  loginStatus,
+  registerStatus,
+  pendingAction,
+  loginError,
+  logoutError,
+  registerError,
+} = authSlice.selectors;

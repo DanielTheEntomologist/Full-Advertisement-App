@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser, loginStatus, pendingAction } from "/src/redux/auth";
+import {
+  loginUser,
+  loginStatus,
+  pendingAction,
+  loginError,
+} from "/src/redux/auth";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
@@ -17,6 +22,7 @@ const LoginForm = () => {
 
   const action = useSelector(pendingAction);
   const status = useSelector(loginStatus);
+  const errorMessage = useSelector(loginError);
 
   const dispatch = useDispatch();
 
@@ -62,6 +68,9 @@ const LoginForm = () => {
   return (
     <div className={styles.loginForm}>
       <h2 className="text-center mb-4">Login to AdMarket</h2>
+      {errorMessage ? (
+        <div className="alert alert-danger">{errorMessage}</div>
+      ) : null}
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label htmlFor="loginName" className="form-label">

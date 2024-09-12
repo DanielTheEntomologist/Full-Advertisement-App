@@ -145,7 +145,7 @@ const authSlice = createSlice({
       if (action.payload.message === "Logged out") {
         setAsLoggedOutReducer(state);
       } else {
-        state.loginError = action.payload.message;
+        state.logoutError = action.payload.message;
       }
     });
     builder.addCase(logout.rejected, (state, action) => {

@@ -1,15 +1,28 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { logout, pendingAction, loginStatus } from "/src/redux/auth";
+import {
+  logout,
+  pendingAction,
+  loginStatus,
+  logoutError,
+} from "/src/redux/auth";
 import { Button, Spinner } from "reactstrap";
 
 const LogoutPage = () => {
   const dispatch = useDispatch();
   const action = useSelector(pendingAction);
   const status = useSelector(loginStatus);
+  const errorMessage = useSelector(logoutError);
 
   if (action === null && status === "authorized") {
-    return <Button onClick={() => dispatch(logout())}>Confirm Logout</Button>;
+    return (
+      <div>
+        {errorMessage ? (
+          <div className="alert alert-danger">{errorMessage}</div>
+        ) : null}
+        <Button onClick={() => dispatch(logout())}>Confirm Logout</Button>
+      </div>
+    );
   }
 
   if (action === "logout" && status === "authorized") {

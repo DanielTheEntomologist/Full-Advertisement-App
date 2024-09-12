@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import styles from "./RegisterForm.module.scss";
-import { useDispatch } from "react-redux";
-import { registerUser } from "../../../redux/auth";
+import { useDispatch, useSelector } from "react-redux";
+import { registerUser, pendingAction, loginStatus } from "../../../redux/auth";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheck } from "@fortawesome/free-solid-svg-icons";
+import { Spinner } from "reactstrap";
 
 const RegisterForm = () => {
   const dispatch = useDispatch();
@@ -14,6 +17,36 @@ const RegisterForm = () => {
     registerConfirmPassword: "",
     agreeTerms: false,
   });
+
+  const action = useSelector(pendingAction);
+  const status = useSelector(loginStatus);
+
+  if (action === "register" && status === "unauthorized") {
+    return (
+      <div>
+        <Spinner />
+        Registering in progress...
+      </div>
+    );
+  }
+
+  if (action === "login" && status === "unauthorized") {
+    return (
+      <div>
+        <Spinner />
+        Logging You in...
+      </div>
+    );
+  }
+
+  if (status === "authorized") {
+    return (
+      <div>
+        <FontAwesomeIcon icon={faCheck} />
+        You are registered and logged in!
+      </div>
+    );
+  }
 
   const handleInputChange = (e) => {
     const { name, value, type, checked, files } = e.target;

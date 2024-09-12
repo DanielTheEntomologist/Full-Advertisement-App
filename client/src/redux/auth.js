@@ -6,7 +6,7 @@ const API_URL = "http://localhost:8000/api/";
 const COLLECTION_NAME = "auth";
 
 // Define an async thunk action for fetching ads
-export const login = createAsyncThunk(
+export const loginUser = createAsyncThunk(
   "auth/login",
   async ({ login, password }) => {
     const urlencodedData = new URLSearchParams({ login, password }); // Encode the data as x-www-form-urlencoded
@@ -46,7 +46,7 @@ export const fetchCurrentUser = createAsyncThunk("auth/user", async ({}) => {
 
 export const registerUser = createAsyncThunk(
   "auth/register",
-  async ({ login, password, avatar, phone, email }) => {
+  async ({ login, password, avatar, phone, email }, { dispatch }) => {
     const formData = new FormData();
     formData.append("login", login);
     formData.append("password", password);
@@ -60,6 +60,8 @@ export const registerUser = createAsyncThunk(
     });
 
     const data = await response.json();
+
+    await dispatch(loginUser({ login, password }));
 
     return data;
   }
@@ -108,14 +110,14 @@ const authSlice = createSlice({
 
   extraReducers: (builder) => {
     // login cases
-    builder.addCase(login.pending, (state) => {
+    builder.addCase(loginUser.pending, (state) => {
       state.pendingAction = "login";
     });
-    builder.addCase(login.fulfilled, (state, action) => {
+    builder.addCase(loginUser.fulfilled, (state, action) => {
       state.pendingAction = null;
       setAsLoggedInReducer(state, action);
     });
-    builder.addCase(login.rejected, (state, action) => {
+    builder.addCase(loginUser.rejected, (state, action) => {
       state.pendingAction = null;
 
       state.error = action.error.message;
@@ -126,9 +128,21 @@ const authSlice = createSlice({
     });
     builder.addCase(logout.fulfilled, (state, action) => {
       state.pendingAction = null;
-      setAsLoggedOutReducer(state);
+      setAsLoggedInReducer(state);
     });
     builder.addCase(logout.rejected, (state, action) => {
+      state.pendingAction = null;
+      state.error = action.error.message;
+    });
+    // register cases
+    builder.addCase(registerUser.pending, (state) => {
+      state.pendingAction = "register";
+    });
+    builder.addCase(registerUser.fulfilled, (state, action) => {
+      state.pendingAction = null;
+      loginUser(state.login, state.password);
+    });
+    builder.addCase(registerUser.rejected, (state, action) => {
       state.pendingAction = null;
       state.error = action.error.message;
     });

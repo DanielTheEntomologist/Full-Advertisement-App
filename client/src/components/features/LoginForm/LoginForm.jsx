@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { login, loginStatus, pendingAction } from "/src/redux/auth";
-// import fontawesome component
+import { loginUser, loginStatus, pendingAction } from "/src/redux/auth";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import checkmark icon
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
-// import loading spinner
 import { Spinner } from "reactstrap";
 
 import styles from "./LoginForm.module.scss";
@@ -53,7 +51,10 @@ const LoginForm = () => {
     const form = e.target;
     if (form.reportValidity()) {
       dispatch(
-        login({ login: formData.loginName, password: formData.loginPassword })
+        loginUser({
+          login: formData.loginName,
+          password: formData.loginPassword,
+        })
       );
     }
   };

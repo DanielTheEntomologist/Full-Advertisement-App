@@ -163,7 +163,16 @@ const authSlice = createSlice({
       if (action.payload.user) {
         state.registerStatus = "registered";
       } else {
-        state.registerError = action.payload.message;
+        if (action.payload.message) {
+          state.registerError = action.payload.message;
+        }
+        if (action.payload.errors) {
+          state.registerError =
+            "Error:\n" + JSON.stringify(action.payload.errors);
+        }
+        if (action.payload.error) {
+          state.registerError = action.payload.error;
+        }
       }
     });
     builder.addCase(registerUser.rejected, (state, action) => {

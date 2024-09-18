@@ -29,7 +29,7 @@ const ExplorePage = ({}) => {
 
   useEffect(() => {
     console.log("Loading ads...");
-    dispatch(fetchAds());
+    if (ads.length < 6) dispatch(fetchAds());
 
     setLoading(false);
 

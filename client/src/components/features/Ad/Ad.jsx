@@ -10,8 +10,9 @@ import {
 import { usersRedux } from "../../../redux/users";
 import { fetchUserById } from "../../../redux/users";
 import { useDispatch, useSelector } from "react-redux"; // Import from @reduxjs/toolkit
+import { NavLink, useLocation, useParams } from "react-router-dom";
 
-import { fetchAds } from "../../../redux/ads";
+import { fetchAdById } from "../../../redux/ads";
 
 // import styles from "./ExplorePage.module.scss";
 
@@ -21,27 +22,28 @@ import SearchCategories from "../../common/SearchCategories/SearchCategories";
 import { nanoid } from "@reduxjs/toolkit";
 
 const Ad = () => {
+  const params = useParams();
+  const adId = params.id;
+
   const dispatch = useDispatch();
 
-  const ad = useSelector(selectFirst);
+  const ad = useSelector((state) => selectAdById(state, adId));
   const userId = ad ? ad.seller : undefined;
   const user = useSelector((state) =>
     usersRedux.selectors.selectById(state, userId)
   );
 
   useEffect(() => {
-    if (userId && !user) {
-      dispatch(fetchUserById(userId));
-    }
+    if (userId && !user) dispatch(fetchUserById(userId));
   }, [dispatch, userId]);
 
   useEffect(() => {
-    dispatch(fetchAds());
+    if (adId && !ad) dispatch(fetchAdById(adId));
     return () => {};
-  }, [dispatch]);
+  }, [dispatch, adId]);
 
   let adContent = (
-    <div>
+    <div className="card mb-4">
       <Spinner /> Loading Your Ad...
     </div>
   );
@@ -113,42 +115,8 @@ const Ad = () => {
             <div className="card mb-4">
               <div className="card-body">
                 <h5 className="card-title">Location</h5>
-
+                {locationContent}
                 {/* <div id="map" className="map-container"></div> */}
-              </div>
-            </div>
-            <div className="card">
-              <div className="card-body">
-                <h5 className="card-title">Leave a Review</h5>
-                <form id="reviewForm">
-                  <div className="mb-3">
-                    <label htmlFor="rating" className="form-label">
-                      Rating
-                    </label>
-                    <select className="form-select" id="rating" required>
-                      <option value="">Select a rating</option>
-                      <option value="5">5 stars</option>
-                      <option value="4">4 stars</option>
-                      <option value="3">3 stars</option>
-                      <option value="2">2 stars</option>
-                      <option value="1">1 star</option>
-                    </select>
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="comment" className="form-label">
-                      Comment
-                    </label>
-                    <textarea
-                      className="form-control"
-                      id="comment"
-                      rows="3"
-                      required
-                    ></textarea>
-                  </div>
-                  <button type="submit" className="btn btn-primary">
-                    Submit Review
-                  </button>
-                </form>
               </div>
             </div>
           </div>

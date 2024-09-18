@@ -11,6 +11,7 @@ function App() {
     <MainLayout>
       <Routes>
         <Route path="/" element={<ExplorePage />} />
+        <Route path="/ads/:id" element={<AdPage />} />
         <Route path="/ads" element={<ExplorePage />} />
         <Route path="/explore" element={<ExplorePage />} />
         <Route path="/login" element={<LoginPage />} />

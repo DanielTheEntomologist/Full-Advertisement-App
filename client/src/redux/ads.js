@@ -18,6 +18,17 @@ export const fetchAds = createAsyncThunk("ads/fetchAds", async () => {
   return data;
 });
 
+export const fetchAdById = createAsyncThunk("ads/fetchAdById", async (id) => {
+  const response = await fetch(API_URL + COLLECTION_NAME + "/" + id, {
+    method: "GET",
+  });
+
+  const data = await response.json();
+  data.id = data._id;
+  delete data._id;
+  return data;
+});
+
 const addMultipleReducer = (state, action) => {
   const incomingAds = action.payload;
   const incomingIds = incomingAds.map((ad) => ad.id);
@@ -25,6 +36,16 @@ const addMultipleReducer = (state, action) => {
     state.ads = state.ads.filter((ad) => !incomingIds.includes(ad.id));
   }
   state.ads.push(...incomingAds);
+  return state;
+};
+
+const addSingleReducer = (state, action) => {
+  const incomingItem = action.payload;
+  const incomingId = incomingItem.id;
+  state[COLLECTION_NAME] = state[COLLECTION_NAME].filter(
+    (item) => incomingId === item.id
+  );
+  state[COLLECTION_NAME].push(incomingItem);
   return state;
 };
 
@@ -38,13 +59,7 @@ const adsSlice = createSlice({
     hasMore: true,
   },
   reducers: {
-    addSingle: (state, action) => {
-      const incomingAd = action.payload;
-      const incomingId = incomingAd.id;
-      state.ads = state.ads.filter((ad) => incomingId === ad.id);
-      state.ads.push(ad);
-      return state;
-    },
+    addSingle: addSingleReducer,
     addMultiple: addMultipleReducer,
   },
   selectors: {
@@ -53,6 +68,7 @@ const adsSlice = createSlice({
     selectFirst: (state) => state.ads[0] || null,
   },
   extraReducers: (builder) => {
+    // fetchAds cases
     builder.addCase(fetchAds.pending, (state) => {
       state.status = "loading";
     });
@@ -61,6 +77,18 @@ const adsSlice = createSlice({
       state = addMultipleReducer(state, action);
     });
     builder.addCase(fetchAds.rejected, (state, action) => {
+      state.status = "failed";
+      state.error = action.error.message;
+    });
+    // fetchAdbyId cases
+    builder.addCase(fetchAdById.pending, (state) => {
+      state.status = "loading";
+    });
+    builder.addCase(fetchAdById.fulfilled, (state, action) => {
+      state.status = "succeeded";
+      state = addSingleReducer(state, action);
+    });
+    builder.addCase(fetchAdById.rejected, (state, action) => {
       state.status = "failed";
       state.error = action.error.message;
     });

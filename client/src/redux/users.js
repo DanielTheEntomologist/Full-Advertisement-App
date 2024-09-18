@@ -66,11 +66,9 @@ const usersSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(fetchUserById.pending, (state) => {
-      console.log("fetchUserById.pending");
       state.status = "loading";
     });
     builder.addCase(fetchUserById.fulfilled, (state, action) => {
-      console.log("fetchUserById.fulfilled");
       state.status = "succeeded";
       state = addSingleReducer(state, action);
     });

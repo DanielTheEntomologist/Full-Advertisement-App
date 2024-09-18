@@ -11,9 +11,8 @@ const defaultAvatar = "./public/default-avatar.png";
 /****** GET USER ********/
 exports.get = async (req, res) => {
   try {
-    console.log("user.get", req.params.id);
     const user = await User.findOne({ _id: req.params.id });
-    console.log("user.get", user);
+
     res.status(200).json(user);
   } catch (err) {
     console.log(err);

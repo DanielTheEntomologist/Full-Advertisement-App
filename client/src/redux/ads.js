@@ -19,15 +19,12 @@ export const fetchAds = createAsyncThunk("ads/fetchAds", async () => {
 });
 
 const addMultipleReducer = (state, action) => {
-  console.log("addMultipleReducer state", state.ads);
-  console.log("addMultipleReducer action", action);
   const incomingAds = action.payload;
   const incomingIds = incomingAds.map((ad) => ad.id);
   if (state.ads) {
     state.ads = state.ads.filter((ad) => !incomingIds.includes(ad.id));
   }
   state.ads.push(...incomingAds);
-  console.log("addMultipleReducer state after", state.ads);
   return state;
 };
 
@@ -53,6 +50,7 @@ const adsSlice = createSlice({
   selectors: {
     sellectAllAds: (state) => state.ads,
     selectAdById: (state, id) => state.ads.find((ad) => ad.id === id),
+    selectFirst: (state) => state.ads[0] || null,
   },
   extraReducers: (builder) => {
     builder.addCase(fetchAds.pending, (state) => {
@@ -60,8 +58,6 @@ const adsSlice = createSlice({
     });
     builder.addCase(fetchAds.fulfilled, (state, action) => {
       state.status = "succeeded";
-      console.log("fetchAds.fulfilled", action.payload);
-      // state.ads.push(...action.payload);
       state = addMultipleReducer(state, action);
     });
     builder.addCase(fetchAds.rejected, (state, action) => {
@@ -73,4 +69,4 @@ const adsSlice = createSlice({
 
 export default adsSlice;
 export const { addMultiple, addSingle } = adsSlice.actions;
-export const { sellectAllAds, selectAdById } = adsSlice.selectors;
+export const { sellectAllAds, selectAdById, selectFirst } = adsSlice.selectors;

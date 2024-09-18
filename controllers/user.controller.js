@@ -11,8 +11,10 @@ const defaultAvatar = "./public/default-avatar.png";
 /****** GET USER ********/
 exports.get = async (req, res) => {
   try {
-    const users = await User.find();
-    res.status(200).json(users);
+    console.log("user.get", req.params.id);
+    const user = await User.findOne({ _id: req.params.id });
+    console.log("user.get", user);
+    res.status(200).json(user);
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "problem with getting user" });

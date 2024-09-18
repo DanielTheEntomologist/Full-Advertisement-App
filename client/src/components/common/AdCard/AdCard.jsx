@@ -8,6 +8,7 @@ import {
   Button,
   Placeholder,
 } from "reactstrap";
+import { NavLink } from "react-router-dom";
 import styles from "./AdCard.module.scss";
 
 const imgPlaceholder = () => (
@@ -75,12 +76,18 @@ const AdCard = ({ ad, loading }) => {
   }
 
   return (
-    <div data-category={ad ? ad.category : "loading"}>
+    <NavLink
+      data-category={ad ? ad.category : "loading"}
+      to={"ads/" + ad ? ad.id : ""}
+      style={{
+        all: "unset",
+      }}
+    >
       <Card className={styles.card}>
         {cardImage}
         {cardBody}
       </Card>
-    </div>
+    </NavLink>
   );
 };
 

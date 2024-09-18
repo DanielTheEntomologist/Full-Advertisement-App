@@ -83,7 +83,7 @@ const MainMenu = () => {
         <Collapse isOpen={isOpen} navbar>
           <Nav className="ms-auto align-items-center" navbar>
             <NavItem>
-              <NavLink to="/" className="nav-link">
+              <NavLink to="/ads" className="nav-link">
                 Home
               </NavLink>
             </NavItem>

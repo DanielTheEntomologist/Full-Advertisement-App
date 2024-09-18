@@ -5,7 +5,9 @@ import {
   registerUser,
   pendingAction,
   loginStatus,
+  registerStatus,
   registerError as error,
+  loginError,
 } from "../../../redux/auth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
@@ -25,6 +27,7 @@ const RegisterForm = () => {
 
   const action = useSelector(pendingAction);
   const status = useSelector(loginStatus);
+  const regStatus = useSelector(registerStatus);
   const errorMessage = useSelector(error);
 
   if (action === "register" && status === "unauthorized") {
@@ -52,6 +55,13 @@ const RegisterForm = () => {
         You are registered and logged in!
       </div>
     );
+  }
+  if (
+    regStatus === "registered" &&
+    status === "unauthorized" &&
+    loginError === null
+  ) {
+    dispatch(loginUser(formData.registerName, formData.registerPassword));
   }
 
   const handleInputChange = (e) => {

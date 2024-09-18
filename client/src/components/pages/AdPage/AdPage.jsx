@@ -17,7 +17,7 @@ const AdPage = () => {
   const activeTab = location.pathname === "/register" ? "register" : "login";
 
   return (
-    <section class="container" id="adPage">
+    <section className="container" id="adPage">
       This is an AdPage
       <Ad />
       <AdForm />

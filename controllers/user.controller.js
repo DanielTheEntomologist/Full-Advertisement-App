@@ -6,7 +6,7 @@ const { validationResult } = require("express-validator");
 
 const { deleteFile } = require("../utils/deleteFile");
 
-const defaultAvatar = "uploads/default-avatar.png";
+const defaultAvatar = "./public/default-avatar.png";
 
 /****** GET USER ********/
 exports.get = async (req, res) => {
@@ -72,7 +72,7 @@ exports.add = async (req, res) => {
     // return new user while hiding password and salt
     newUser.password = undefined;
     newUser.salt = undefined;
-    res.status(201).send(newUser);
+    res.status(201).send({ message: "Registration Succesful", user: newUser });
   } catch (err) {
     console.log(err.message);
     res.status(500).json({ message: "problem with adding user" });

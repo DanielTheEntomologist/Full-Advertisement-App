@@ -1,16 +1,11 @@
-import { Col, Row, Spinner } from "reactstrap";
-import { useState, useEffect } from "react";
+import { Spinner } from "reactstrap";
+import { useEffect } from "react";
 
-import {
-  addMultiple,
-  selectAdById,
-  sellectAllAds,
-  selectFirst,
-} from "../../../redux/ads";
+import { selectAdById } from "../../../redux/ads";
 import { usersRedux } from "../../../redux/users";
 import { fetchUserById } from "../../../redux/users";
 import { useDispatch, useSelector } from "react-redux"; // Import from @reduxjs/toolkit
-import { NavLink, useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import { fetchAdById } from "../../../redux/ads";
 
